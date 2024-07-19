@@ -180,3 +180,84 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False if DEBUG else True,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        # "special": {
+        #     "()": "project.logging.SpecialFilter",
+        #     "foo": "bar",
+        # },
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "info": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(BASE_DIR, "log/info.log"),
+            "maxBytes": 300 * 1024 * 1024,  # 300 mb
+            "backupCount": 10,
+            "formatter": "verbose",
+            "encoding": "utf-8"
+        },
+        "error": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(BASE_DIR, "log/error.log"),
+            "maxBytes": 300 * 1024 * 1024,  # 300 mb
+            "backupCount": 10,
+            "formatter": "verbose",
+            "encoding": "utf-8"
+        },
+        # "mail_admins": {
+        #     "level": "ERROR",
+        #     "class": "django.utils.log.AdminEmailHandler",
+        #     "filters": ["special"],
+        # },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "propagate": True,
+        },
+        "log_info": {
+            "handlers": ["info"],
+            "propagate": True,
+            "level": "INFO"
+        },
+        "log_error": {
+            "handlers": ["error"],
+            "propagate": True,
+            "level": "ERROR"
+        },
+        # "django.request": {
+        #     "handlers": ["mail_admins"],
+        #     "level": "ERROR",
+        #     "propagate": False,
+        # },
+        # "myproject.custom": {
+        #     "handlers": ["console", "mail_admins"],
+        #     "level": "INFO",
+        #     "filters": ["special"],
+        # },
+    },
+}

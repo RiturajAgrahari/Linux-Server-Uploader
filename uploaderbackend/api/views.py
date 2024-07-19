@@ -1,4 +1,3 @@
-
 from django.shortcuts import HttpResponse
 from rest_framework.generics import GenericAPIView
 from rest_framework.authentication import SessionAuthentication
@@ -7,6 +6,13 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
 from rest_framework.decorators import authentication_classes, permission_classes, api_view
+
+import os
+import logging
+
+logger = logging.getLogger("django")
+info_logger = logging.getLogger("log_info")
+error_logger = logging.getLogger("log_error")
 
 
 # Create your views here.
@@ -24,6 +30,10 @@ def upload_server(request, *args, **kwargs):
         for filename, file in request.FILES.items():
             server = request.FILES[filename].file
             print(server)
+
+        output = os.system('ls')
+        info_logger.info(f"{request.user} is posting server!")
+        info_logger.info(output)
 
         return Response({"message": "we got your file !"}, status=200)
     return Response({"message": "Who are you? !"}, status=401)

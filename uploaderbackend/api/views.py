@@ -73,11 +73,12 @@ def upload_server(request, *args, **kwargs):
                                 subprocess.run("rm -r nohup.out", shell=True)
                                 subprocess.run("rm -r logfile.log", shell=True)
 
-                                nohup_output = subprocess.run(f'nohup ./server/{correct_format}/{files} &',
-                                                              shell=True,
-                                                              text=True,
-                                                              stderr=open('logfile.log', 'a'))
-                                info_logger.info(nohup_output.stdout)
+                                with open('nohup.out', 'w') as f:
+                                    nohup_output = subprocess.run(f'nohup ./server/{correct_format}/{files} &',
+                                                                  shell=True,
+                                                                  text=True,
+                                                                  stdout=f)
+                                # info_logger.info(nohup_output)
                                 # nohup_output = subprocess.Popen([f'nohup ./server/{correct_format}/{files} &'],
                                 #                                 stdout=open('nohup.out', 'w'),
                                 #                                 stderr=open('logfile.log', 'a'),

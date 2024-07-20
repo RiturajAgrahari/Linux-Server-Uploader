@@ -34,7 +34,7 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['linux.rituraj-agrahari.com']
+# ALLOWED_HOSTS = ['linuxapi.rituraj-agrahari.com']
 
 
 # Application definition

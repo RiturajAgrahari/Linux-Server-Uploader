@@ -61,11 +61,11 @@ def upload_server(request, *args, **kwargs):
 
                 # finding the dir that we get after extraction
                 server_dirs = subprocess.run(f'ls ./server/', shell=True, capture_output=True, text=True)
-                info_logger.info(server_dirs)
+                info_logger.info(server_dirs.stdout)
                 # list_server_dir = f'ls ./server/'
                 # server_dirs = subprocess.check_output(list_server_dir, shell=True)
                 # list_dirs = str(server_dirs.decode('utf-8')).split("\n")
-                list_dirs = str(server_dirs).split("\n")
+                list_dirs = str(server_dirs.stdout).split("\n")
                 for directory in list_dirs:
                     if "." not in directory and directory:
                         correct_format = directory.replace(" ", "\\ ")
@@ -75,7 +75,7 @@ def upload_server(request, *args, **kwargs):
                         # list_extracted_dir = f'ls ./server/{correct_format}'
                         # extracted_dirs = subprocess.check_output(list_extracted_dir, shell=True)
                         # list_files = str(extracted_dirs.decode('utf-8')).split("\n")
-                        list_files = str(extracted_dirs).split("\n")
+                        list_files = str(extracted_dirs.stdout).split("\n")
                         for files in list_files:
                             if files.endswith(".x86_64"):
                                 allow_exe_permits = f'chmod +x ./server/{correct_format}/{files}'

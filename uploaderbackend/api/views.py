@@ -1,14 +1,18 @@
 from django.shortcuts import HttpResponse
-from rest_framework.generics import GenericAPIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAdminUser
-from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
 from rest_framework.decorators import authentication_classes, permission_classes, api_view
+from django.core.files.storage import FileSystemStorage, default_storage
 
 import os
 import logging
+import subprocess
+
+from .serializers import ServerPIDSerializer
+from .models import ServerPID
+from .forms import ServerPIDForm
 
 logger = logging.getLogger("django")
 info_logger = logging.getLogger("log_info")
@@ -24,16 +28,85 @@ def home_page(request):
 @permission_classes([IsAdminUser])
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
-    if str(request.user) == "Rituraj":
-        server_file = request.data.get("serverFile")
-        print(server_file)
+    if str(request.user) == "Rituraj" or str(request.user) == "abbie":
+        server_file_name = str(request.data.get("serverFile"))
+        server_file = ""
         for filename, file in request.FILES.items():
-            server = request.FILES[filename].file
-            print(server)
+            server_file = request.FILES[filename].file
+        try:
+            if server_file_name.endswith(".rar") or server_file_name.endswith(".zip"):
+                # removing the old server file
+                subprocess.run(f'rm -r ./server/*', shell=True)
+                # clear_dir_command = f'rm -r ./server/*'
+                # subprocess.check_output(clear_dir_command, shell=True)
 
-        output = os.system('ls')
-        info_logger.info(f"{request.user} is posting server!")
-        info_logger.info(output)
+                # saving the new file
+                fs = FileSystemStorage()
+                fs.save(f"./server/{server_file_name}", server_file)
 
-        return Response({"message": "we got your file !"}, status=200)
-    return Response({"message": "Who are you? !"}, status=401)
+                if server_file_name.endswith(".rar"):
+                    # extracting the .rar file
+                    subprocess.run(f'unrar x ./server/{server_file_name} ./server/', shell=True)
+                    # unrar_command = f'unrar x ./server/{server_file_name} ./server/'
+                    # subprocess.check_output(unrar_command, shell=True)
+
+                elif server_file_name.endswith(".zip"):
+                    # unzip the .zip file
+                    unzip_command = f'unzip ./server/{server_file_name} -d ./server/'
+                    subprocess.check_output(unzip_command, shell=True)
+
+                else:
+                    info_logger.info("some process error in ./server can't find .rar/.zip even after verifying??")
+                    return Response({"message": "Internal Server Error!"}, status=500)
+
+                # finding the dir that we get after extraction
+                server_dirs = subprocess.run(f'ls ./server/', shell=True, capture_output=True, text=True)
+                info_logger.info(server_dirs)
+                # list_server_dir = f'ls ./server/'
+                # server_dirs = subprocess.check_output(list_server_dir, shell=True)
+                # list_dirs = str(server_dirs.decode('utf-8')).split("\n")
+                list_dirs = str(server_dirs).split("\n")
+                for directory in list_dirs:
+                    if "." not in directory and directory:
+                        correct_format = directory.replace(" ", "\\ ")
+
+                        # opening the extracted dir
+                        extracted_dirs = subprocess.run(f'ls ./server/{correct_format}', shell=True, capture_output=True, text=True)
+                        # list_extracted_dir = f'ls ./server/{correct_format}'
+                        # extracted_dirs = subprocess.check_output(list_extracted_dir, shell=True)
+                        # list_files = str(extracted_dirs.decode('utf-8')).split("\n")
+                        list_files = str(extracted_dirs).split("\n")
+                        for files in list_files:
+                            if files.endswith(".x86_64"):
+                                allow_exe_permits = f'chmod +x ./server/{correct_format}/{files}'
+                                exe_res = subprocess.check_output(allow_exe_permits, shell=True)
+                                info_logger.info(exe_res)
+                                info_logger.info(correct_format)
+
+                                subprocess.check_output("rm -r nohup.out", shell=True)
+                                subprocess.check_output("rm -r logfile.log", shell=True)
+
+                                nohup_output = subprocess.Popen([f'nohup ./server/{correct_format}/{files} &'],
+                                                                stdout=open('nohup.out', 'w'),
+                                                                stderr=open('logfile.log', 'a'),
+                                                                shell=True,
+                                                                preexec_fn=os.setpgrp)
+
+                                return Response({"message": "you files got execution permission"}, status=200)
+
+                        else:
+                            info_logger.info("no file ends with .x86_64 in extracted directory")
+                            return Response({"message": "Internal Server Error!"}, status=500)
+
+                else:
+                    info_logger.info("no extracted directory in ./server")
+                    return Response({"message": "Internal Server Error!"}, status=500)
+
+            info_logger.info("unable to find .zip / .rar in ./server")
+            return Response({"message": "Internal Server Error!"}, status=500)
+
+        except Exception as e:
+            error_logger.error(e)
+            return Response({"message": "Internal Server Error!"}, status=500)
+
+    return Response({"message": "You are Unauthorized!"}, status=401)

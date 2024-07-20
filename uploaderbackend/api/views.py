@@ -77,7 +77,7 @@ def upload_server(request, *args, **kwargs):
                                                               shell=True,
                                                               text=True,
                                                               stderr=open('logfile.log', 'a'))
-                                info_logger.info(nohup_output)
+                                info_logger.info(nohup_output.stdout)
                                 # nohup_output = subprocess.Popen([f'nohup ./server/{correct_format}/{files} &'],
                                 #                                 stdout=open('nohup.out', 'w'),
                                 #                                 stderr=open('logfile.log', 'a'),

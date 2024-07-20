@@ -37,8 +37,6 @@ def upload_server(request, *args, **kwargs):
             if server_file_name.endswith(".rar") or server_file_name.endswith(".zip"):
                 # removing the old server file
                 subprocess.run(f'rm -r ./server/*', shell=True)
-                # clear_dir_command = f'rm -r ./server/*'
-                # subprocess.check_output(clear_dir_command, shell=True)
 
                 # saving the new file
                 fs = FileSystemStorage()
@@ -47,8 +45,6 @@ def upload_server(request, *args, **kwargs):
                 if server_file_name.endswith(".rar"):
                     # extracting the .rar file
                     subprocess.run(f'unrar x ./server/{server_file_name} ./server/', shell=True)
-                    # unrar_command = f'unrar x ./server/{server_file_name} ./server/'
-                    # subprocess.check_output(unrar_command, shell=True)
 
                 elif server_file_name.endswith(".zip"):
                     # unzip the .zip file
@@ -61,10 +57,6 @@ def upload_server(request, *args, **kwargs):
 
                 # finding the dir that we get after extraction
                 server_dirs = subprocess.run(f'ls ./server/', shell=True, capture_output=True, text=True)
-                info_logger.info(server_dirs.stdout)
-                # list_server_dir = f'ls ./server/'
-                # server_dirs = subprocess.check_output(list_server_dir, shell=True)
-                # list_dirs = str(server_dirs.decode('utf-8')).split("\n")
                 list_dirs = str(server_dirs.stdout).split("\n")
                 for directory in list_dirs:
                     if "." not in directory and directory:
@@ -72,25 +64,25 @@ def upload_server(request, *args, **kwargs):
 
                         # opening the extracted dir
                         extracted_dirs = subprocess.run(f'ls ./server/{correct_format}', shell=True, capture_output=True, text=True)
-                        # list_extracted_dir = f'ls ./server/{correct_format}'
-                        # extracted_dirs = subprocess.check_output(list_extracted_dir, shell=True)
-                        # list_files = str(extracted_dirs.decode('utf-8')).split("\n")
                         list_files = str(extracted_dirs.stdout).split("\n")
                         for files in list_files:
                             if files.endswith(".x86_64"):
-                                allow_exe_permits = f'chmod +x ./server/{correct_format}/{files}'
-                                exe_res = subprocess.check_output(allow_exe_permits, shell=True)
-                                info_logger.info(exe_res)
+                                subprocess.run(f'chmod +x ./server/{correct_format}/{files}', shell=True)
                                 info_logger.info(correct_format)
 
-                                subprocess.check_output("rm -r nohup.out", shell=True)
-                                subprocess.check_output("rm -r logfile.log", shell=True)
+                                subprocess.run("rm -r nohup.out", shell=True)
+                                subprocess.run("rm -r logfile.log", shell=True)
 
-                                nohup_output = subprocess.Popen([f'nohup ./server/{correct_format}/{files} &'],
-                                                                stdout=open('nohup.out', 'w'),
-                                                                stderr=open('logfile.log', 'a'),
-                                                                shell=True,
-                                                                preexec_fn=os.setpgrp)
+                                nohup_output = subprocess.run(f'nohup ./server/{correct_format}/{files} &',
+                                                              shell=True,
+                                                              text=True,
+                                                              stderr=open('logfile.log', 'a'))
+                                info_logger.info(nohup_output)
+                                # nohup_output = subprocess.Popen([f'nohup ./server/{correct_format}/{files} &'],
+                                #                                 stdout=open('nohup.out', 'w'),
+                                #                                 stderr=open('logfile.log', 'a'),
+                                #                                 shell=True,
+                                #                                 preexec_fn=os.setpgrp)
 
                                 return Response({"message": "you files got execution permission"}, status=200)
 

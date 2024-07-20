@@ -48,8 +48,7 @@ def upload_server(request, *args, **kwargs):
 
                 elif server_file_name.endswith(".zip"):
                     # unzip the .zip file
-                    unzip_command = f'unzip ./server/{server_file_name} -d ./server/'
-                    subprocess.check_output(unzip_command, shell=True)
+                    subprocess.run(f'unzip ./server/{server_file_name} -d ./server/', shell=True)
 
                 else:
                     info_logger.info("some process error in ./server can't find .rar/.zip even after verifying??")
@@ -78,14 +77,9 @@ def upload_server(request, *args, **kwargs):
                                                                   shell=True,
                                                                   text=True,
                                                                   stdout=f)
-                                # info_logger.info(nohup_output)
-                                # nohup_output = subprocess.Popen([f'nohup ./server/{correct_format}/{files} &'],
-                                #                                 stdout=open('nohup.out', 'w'),
-                                #                                 stderr=open('logfile.log', 'a'),
-                                #                                 shell=True,
-                                #                                 preexec_fn=os.setpgrp)
+                                    info_logger.info(nohup_output.pid)
 
-                                return Response({"message": "you files got execution permission"}, status=200)
+                                return Response({"message": "server is started!"}, status=200)
 
                         else:
                             info_logger.info("no file ends with .x86_64 in extracted directory")

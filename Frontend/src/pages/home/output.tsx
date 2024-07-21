@@ -15,8 +15,8 @@ function Output() {
                 console.error("Error Fetching", error)
             }
 
-            fetchOutput();
         }
+        fetchOutput();
     }, [])
 
 

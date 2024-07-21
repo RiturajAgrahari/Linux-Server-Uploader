@@ -112,7 +112,6 @@ def upload_server(request, *args, **kwargs):
 def get_std_out(request, *args, **kwargs):
     if str(request.user) in ["Rituraj", "abbie"]:
         output = subprocess.run("cat nohup.out", shell=True, text=True)
-        print(output)
         data = {
             "output": output
         }

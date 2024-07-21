@@ -19,6 +19,9 @@ info_logger = logging.getLogger("log_info")
 error_logger = logging.getLogger("log_error")
 
 
+online_server_pid = 0
+
+
 # Create your views here.
 def home_page(request):
     return HttpResponse("HOME PAGE")
@@ -72,12 +75,15 @@ def upload_server(request, *args, **kwargs):
                                 subprocess.run("rm -r nohup.out", shell=True)
                                 subprocess.run("rm -r logfile.log", shell=True)
 
+                                if online_server_pid:
+                                    subprocess.run(f"kill {online_server_pid}")
+
                                 with open('nohup.out', 'w') as f:
-                                    nohup_output = subprocess.run(f'nohup ./server/{correct_format}/{files} &',
-                                                                  shell=True,
-                                                                  text=True,
-                                                                  stdout=f)
-                                    info_logger.info(nohup_output.pid)
+                                    cmd = f'./server/{correct_format}/{files}'
+                                    process = subprocess.Popen(cmd, shell=True, stdout=f, start_new_session=True)
+                                    global online_server_pid
+                                    online_server_pid = process.pid + 1
+                                    info_logger.info(process.pid)
 
                                 return Response({"message": "server is started!"}, status=200)
 

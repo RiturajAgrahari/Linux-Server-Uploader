@@ -112,9 +112,12 @@ def upload_server(request, *args, **kwargs):
 def get_std_out(request, *args, **kwargs):
     if str(request.user) in ["Rituraj", "abbie"]:
         try:
-            output = subprocess.run("cat nohup.out", shell=True, text=True)
+
+            with open("nohup.out", "r") as nohup:
+                nohup_output = nohup.read()
+
             data = {
-                "output": output
+                "output": nohup_output
             }
             return Response(data)
         except Exception as e:

@@ -19,6 +19,7 @@
     justify-content: flex-start;
     flex-direction: column;
     border-radius: 10px;
+    box-shadow: 0 0 10px 0 black;
 }
 
 .output-console .console-header {
@@ -47,3 +48,39 @@
 .output-console .console-header :last-child {
     background-color: rgb(67, 249, 67);
 }
+
+.output-console .console-content {
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    margin-right: 50px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0); 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(97, 96, 96); 
+    transition: 0.2s;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: gray;
+    border-radius: 10px;
+}
+
+
+@media screen and (max-width: 900px) {
+    .output-console {
+        width: 90%;
+    }
+}
+    

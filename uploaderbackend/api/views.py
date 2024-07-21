@@ -47,11 +47,11 @@ def upload_server(request, *args, **kwargs):
 
                 if server_file_name.endswith(".rar"):
                     # extracting the .rar file
-                    subprocess.run(f'unrar x ./server/{server_file_name} ./server/', shell=True)
+                    subprocess.run(f"unrar x ./server/'{server_file_name}' ./server/", shell=True)
 
                 elif server_file_name.endswith(".zip"):
                     # unzip the .zip file
-                    subprocess.run(f'unzip ./server/{server_file_name} -d ./server/', shell=True)
+                    subprocess.run(f"unzip ./server/'{server_file_name}' -d ./server/", shell=True)
 
                 else:
                     info_logger.info("some process error in ./server can't find .rar/.zip even after verifying??")

@@ -111,10 +111,14 @@ def upload_server(request, *args, **kwargs):
 @authentication_classes([JWTAuthentication])
 def get_std_out(request, *args, **kwargs):
     if str(request.user) in ["Rituraj", "abbie"]:
-        output = subprocess.run("cat nohup.out", shell=True, text=True)
-        data = {
-            "output": output
-        }
-        return Response(data)
+        try:
+            output = subprocess.run("cat nohup.out", shell=True, text=True)
+            data = {
+                "output": output
+            }
+            return Response(data)
+        except Exception as e:
+            error_logger.error(e)
+            return Response({"message": "Internal Server Error!"}, status=500)
 
     return Response({"message": "You are Unauthorized!"}, status=401)

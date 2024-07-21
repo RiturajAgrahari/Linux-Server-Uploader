@@ -104,3 +104,18 @@ def upload_server(request, *args, **kwargs):
             return Response({"message": "Internal Server Error!"}, status=500)
 
     return Response({"message": "You are Unauthorized!"}, status=401)
+
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+@authentication_classes([JWTAuthentication])
+def get_std_out(request, *args, **kwargs):
+    if str(request.user) in ["Rituraj", "abbie"]:
+        output = subprocess.run("cat nohup.out", shell=True, text=True)
+        print(output)
+        data = {
+            "output": output
+        }
+        return Response(data)
+
+    return Response({"message": "You are Unauthorized!"}, status=401)

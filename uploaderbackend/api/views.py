@@ -80,14 +80,14 @@ def upload_server(request, *args, **kwargs):
                                     info_logger.info(f"old process PID :{online_server_pid}")
                                     subprocess.run(f"kill {online_server_pid}", shell=True)
                                     info_logger.info(f"old process PID :{online_server_pid} killed!")
-                                    global online_server_file_name
-                                    online_server_file_name = str(files)
 
                                 with open('nohup.out', 'w') as f:
                                     cmd = f'./server/{correct_format}/{files}'
                                     process = subprocess.Popen(cmd, shell=True, stdout=f, start_new_session=True)
                                     online_server_pid = process.pid + 1
                                     info_logger.info(f"server PID: {online_server_pid} is online now!")
+                                    global online_server_file_name
+                                    online_server_file_name = str(files)
 
                                 return Response({"message": "server is started!"}, status=200)
 

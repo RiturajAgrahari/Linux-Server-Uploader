@@ -1,0 +1,60 @@
+INFO "OPTIONS /api/token/ HTTP/1.1" 200 0
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+INFO "POST /api/token/ HTTP/1.1" 200 483
+WARNING Unauthorized: /api/token/
+WARNING "POST /api/token/ HTTP/1.1" 401 63
+INFO "POST /api/token/ HTTP/1.1" 200 483
+INFO "OPTIONS /api/token/refresh HTTP/1.1" 200 0
+INFO "OPTIONS /api/token/refresh HTTP/1.1" 200 0
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "OPTIONS /api-data/server-output/ HTTP/1.1" 200 0
+INFO "OPTIONS /api-data/server-output/ HTTP/1.1" 200 0
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+INFO "OPTIONS /api/token/refresh HTTP/1.1" 200 0
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "OPTIONS /api/token/refresh HTTP/1.1" 200 0
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+INFO "OPTIONS /api/token/refresh HTTP/1.1" 200 0
+INFO "OPTIONS /api/token/refresh HTTP/1.1" 200 0
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "POST /api/token/refresh HTTP/1.1" 200 241
+INFO "OPTIONS /api-data/server-output/ HTTP/1.1" 200 0
+INFO "OPTIONS /api-data/server-output/ HTTP/1.1" 200 0
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+ERROR Internal Server Error: /api-data/server-output/
+ERROR "GET /api-data/server-output/ HTTP/1.1" 500 36
+

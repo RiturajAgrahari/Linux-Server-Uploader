@@ -1,0 +1,136 @@
+.home-component {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: rgb(204, 204, 204);
+    flex-direction: column;
+}
+
+.home-component .upload-server {
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 50px 0;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    text-align: center;
+}
+
+.home-component .upload-server form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column; 
+    width: 80%;
+    height: 100%;
+}
+
+.home-component .upload-server form .box__input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    gap: 10px;
+    flex-direction: column;
+    position: relative;
+}
+
+.home-component .upload-server form input[type=file] {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+    }
+
+
+.home-component .upload-server form label {
+    cursor: pointer;
+    font-size: 24px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    transition: 0.2s;
+}
+
+.home-component .upload-server form label svg {
+    width: 100px;
+    height: 100px;
+    font-weight: 100;
+}
+
+.home-component .upload-server form label:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* .box__dragndrop, */
+/* .box__uploading, */
+/* .box__success, */
+/* .box__error {
+  display: none;
+} */
+
+/* 
+.home-component .upload-server form input[type=file]::file-selector-button {
+    font-size: 16px;
+    border: 1px solid wheat;
+    padding: 50px;
+    cursor: pointer;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(204, 204, 204);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+*/
+.home-component .upload-server form button[type=submit], .link-button {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: rgba(204, 204, 204, 0.7);
+    padding: 15px;
+    transition: 0.2s;
+}
+
+
+.home-component .upload-server form button[type=submit] {
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: rgba(204, 204, 204, 0.7);
+    padding: 15px;
+    transition: 0.2s;
+}
+
+.home-component .upload-server form button[type=submit]:hover, .link-button:hover {
+    background-color: rgba(204, 204, 204, 1);
+}
+

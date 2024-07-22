@@ -43,7 +43,7 @@ function App() {
         <Route path='/' element={<ProtectedRoute children={<Home />} />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/logout' element={<Logout />}></Route>
-        <Route path='/stdout' element={<Output />}></Route>
+        <Route path='/console' element={<Output />}></Route>
       </Routes>
     </BrowserRouter>
     </div>

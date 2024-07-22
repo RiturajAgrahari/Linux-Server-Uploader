@@ -20,6 +20,7 @@ error_logger = logging.getLogger("log_error")
 
 
 online_server_pid = 0
+online_server_file_name = ""
 
 
 # Create your views here.
@@ -79,6 +80,8 @@ def upload_server(request, *args, **kwargs):
                                     info_logger.info(f"old process PID :{online_server_pid}")
                                     subprocess.run(f"kill {online_server_pid}", shell=True)
                                     info_logger.info(f"old process PID :{online_server_pid} killed!")
+                                    global online_server_file_name
+                                    online_server_file_name = str(files)
 
                                 with open('nohup.out', 'w') as f:
                                     cmd = f'./server/{correct_format}/{files}'
@@ -117,7 +120,8 @@ def get_std_out(request, *args, **kwargs):
                 nohup_output = nohup.read()
 
             data = {
-                "output": nohup_output
+                "output": nohup_output,
+                "file_name": online_server_file_name
             }
             return Response(data)
         except Exception as e:

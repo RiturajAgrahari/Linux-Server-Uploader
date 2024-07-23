@@ -52,7 +52,7 @@ function ProtectedRoute({children}: ProtectedRouteProps) {
 
     if (isAuthorized === false){
         return (
-            <div style={{display:"flex", justifyContent: "center", alignItems:"center", flexDirection:"column", width:"100%", height: "80vh"}}>
+            <div style={{display:"flex", justifyContent: "center", alignItems:"center", flexDirection:"column", width:"100%", height: "40%", backdropFilter: "blur(10px)", boxShadow: "0 0 5px 0 black", textAlign: "center"}}>
                 <h1>Your Session is Expired</h1>
                 <p>Please Login again!</p>
                 <Link to={"/login"} style={{border:"1px solid gray", textAlign: "center", textDecoration: "none", backgroundColor: "lightgray",color: "black", padding:"15px 40px", fontSize:"24px", width: "40%", margin: "20px"}}>Login</Link>

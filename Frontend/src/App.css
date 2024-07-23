@@ -4,3 +4,10 @@
   background-image: url("static/teotbg.png");
   background-size: cover;
 }
+
+#root > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}

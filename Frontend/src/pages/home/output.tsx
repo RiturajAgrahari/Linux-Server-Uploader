@@ -10,12 +10,8 @@ function Output() {
     const [resizeConsole, setResizeConsole] = useState<boolean>(false)
     const [fileName, setFileName] = useState<string>("")
 
-    const mac = useRef<HTMLDivElement>(null)
-
-    const scrollToBottom = () => {
-        // mac.current?.scrollTo({behavior: "smooth"})
-        mac.current?.scrollIntoView({ behavior: "smooth", block: "end"})
-      }
+    // const mac = useRef<HTMLDivElement>(null)
+    const scrollToMe = useRef<HTMLParagraphElement>(null)
 
     useEffect(() => {
         const fetchOutput = async() => {
@@ -29,8 +25,8 @@ function Output() {
                 console.error("Error Fetching", error)
             } finally {
                 setTimeout(() => {
-                    scrollToBottom();
-                }, 2000)
+                    scrollToMe.current?.scrollIntoView({behavior: "smooth"})
+                }, 1000)
             }
 
         }
@@ -49,10 +45,11 @@ function Output() {
                         &nbsp; {fileName}
                     </div>
                 </div>
-                <div ref={mac} className="console-content">
+                <div className="console-content">
                     {consoleResult}
+                    <p ref={scrollToMe}></p>
                 </div>
-                <button onClick={() => mac.current?.scrollIntoView({behavior: "smooth", block: "end"})}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg></button>
+                <button onClick={() => scrollToMe.current?.scrollIntoView({behavior: "smooth", block: "end"})}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg></button>
             </div>
         </div>
     )

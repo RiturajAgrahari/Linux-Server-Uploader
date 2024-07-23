@@ -1,11 +1,40 @@
 .home-component {
     height: 100vh;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     color: rgb(204, 204, 204);
     flex-direction: column;
+}
+
+.home-component .error-message {
+    position: absolute;
+    top: 10px;
+    box-sizing: border-box;
+    background-color: rgba(253, 48, 48, 0.2);  
+    backdrop-filter: blur(5px);
+    padding-left: 10px;
+    width: 300px;
+    height: 50px;
+    border-left: 5px solid rgb(255, 61, 61);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    transition: 0.5s;
+}
+
+.home-component .error-message p:first-child {
+    padding-top: 10px;
+    color: rgb(145, 25, 25);
+    font-weight: 600;
+    line-height: 10px;
+}
+
+.home-component .error-message p:last-child {
+    color: white;
 }
 
 .home-component .upload-server {
@@ -76,28 +105,9 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-/* .box__dragndrop, */
-/* .box__uploading, */
-/* .box__success, */
-/* .box__error {
-  display: none;
-} */
+/* .home-component .upload-server form button[type=submit] { */
+/* } */
 
-/* 
-.home-component .upload-server form input[type=file]::file-selector-button {
-    font-size: 16px;
-    border: 1px solid wheat;
-    padding: 50px;
-    cursor: pointer;
-    outline: none;
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(204, 204, 204);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-*/
 .home-component .upload-server form button[type=submit], .link-button {
     box-sizing: border-box;
     display: flex;
@@ -134,3 +144,63 @@
     background-color: rgba(204, 204, 204, 1);
 }
 
+.home-component .upload-server form button:disabled {
+    cursor: auto;
+    background-color: rgba(204, 204, 204, 0.2);
+    color: rgba(0, 0, 0, 0.5);
+
+}
+
+.home-component .upload-server form button[type=submit]:disabled:hover {
+    background-color: rgba(204, 204, 204, 0.2);
+}
+
+.home-component .upload-server .loader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 20px;
+    margin-bottom: 20px;
+}
+
+.home-component .upload-server .loader p {
+    /* position: absolute; */
+    width: 20px;
+    height: 20px;
+    top: 0;
+    border-radius: 20px;
+    background-color: gray;
+    animation-name: loading;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-delay: 1s;
+    animation-timing-function: linear;
+}
+
+.home-component .upload-server .loader p:nth-child(0) {
+    animation-delay: 0s;
+}
+
+.home-component .upload-server .loader p:nth-child(1) {
+    animation-delay: 0.25s;
+}
+
+.home-component .upload-server .loader p:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.home-component .upload-server .loader p:nth-child(3) {
+    animation-delay: 0.75s;
+}
+
+
+
+@keyframes loading {
+    0% {height: 20px;}
+    25% {height: 30px;}
+    50% {height: 40px;}
+    75% {height: 30px;}
+    100% {height: 20px;}
+}

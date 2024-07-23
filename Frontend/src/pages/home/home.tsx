@@ -9,6 +9,8 @@ function Home() {
     const formref = useRef<HTMLFormElement>(null)
     const [fileName, setFileName] = useState<string>("")  //or drag it here
     const [fileUploaded, setFileUploaded] = useState<boolean>(false)
+    const [uploadButton, setUploadButton] = useState<boolean>(false)
+
 
     const handleFileUpload = (e: EventTarget & HTMLInputElement) => {
         if (e.files) {
@@ -21,6 +23,7 @@ function Home() {
     const handleUploadServer = async(e: FormEvent) => {
         e.preventDefault()
         formref.current?.reset();
+        setUploadButton(!uploadButton)
         try {
             const res = await api.post("/api-data/upload-server/", {serverFile}, 
                 {
@@ -34,6 +37,8 @@ function Home() {
             }
         } catch (error) {
             console.error("Fetching error", error)
+        } finally {
+            setUploadButton(!uploadButton)
         }
     } 
 

@@ -27,11 +27,13 @@ online_server_file_name = ""
 def home_page(request):
     return HttpResponse("HOME PAGE")
 
+import time
 
 @api_view(["POST"])
 @permission_classes([IsAdminUser])
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
+    time.sleep(10)
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
         server_file_name = str(request.data.get("serverFile"))
         server_file = ""

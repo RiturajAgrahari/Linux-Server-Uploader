@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../../styles/outputConsole.css"
 import api from "../../api";
 import { Link } from "react-router-dom";
@@ -10,6 +10,13 @@ function Output() {
     const [resizeConsole, setResizeConsole] = useState<boolean>(false)
     const [fileName, setFileName] = useState<string>("")
 
+    const mac = useRef<HTMLDivElement>(null)
+
+    const scrollToBottom = () => {
+        // mac.current?.scrollTo({behavior: "smooth"})
+        mac.current?.scrollIntoView({ behavior: "smooth", block: "end"})
+      }
+
     useEffect(() => {
         const fetchOutput = async() => {
             try {
@@ -20,6 +27,10 @@ function Output() {
                 }
             } catch(error) {
                 console.error("Error Fetching", error)
+            } finally {
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 2000)
             }
 
         }
@@ -38,9 +49,10 @@ function Output() {
                         &nbsp; {fileName}
                     </div>
                 </div>
-                <div className="console-content">
+                <div ref={mac} className="console-content">
                     {consoleResult}
                 </div>
+                <button onClick={() => mac.current?.scrollIntoView({behavior: "smooth", block: "end"})}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg></button>
             </div>
         </div>
     )

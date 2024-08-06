@@ -29,13 +29,11 @@ def home_page(request):
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
-        online_server_pid = ServerHistory.objects.all().filter(status="active")
+        online_server_pid = ServerHistory.objects.get(status="active")
         info_logger.info(online_server_pid)
         server_file_name = str(request.data.get("serverFile"))
-        server_file = request.FILES[request.FILES.keys()[0]].file
+        server_file = request.FILES[list(request.FILES.keys())[0]].file
         info_logger.info(server_file)
-        for filename, file in request.FILES.items():
-            server_file = request.FILES[filename].file
         try:
             if server_file_name.endswith(".rar") or server_file_name.endswith(".zip"):
                 # removing the old server file
@@ -70,12 +68,16 @@ def upload_server(request, *args, **kwargs):
                         for files in list_files:
                             if files.endswith(".x86_64"):
                                 subprocess.run(f'chmod +x ./server/{correct_format}/{files}', shell=True)
-
                                 subprocess.run("rm -r nohup.out", shell=True)
 
                                 if online_server_pid:
                                     info_logger.info(f"old process PID :{online_server_pid}")
+                                    old_process = ServerHistory.objects.get(pid=online_server_pid)
+                                    info_logger.info(old_process)
+                                    old_process.status = "Stopped"
+                                    old_process.save()
                                     subprocess.run(f"kill {online_server_pid}", shell=True)
+
                                     info_logger.info(f"old process PID :{online_server_pid} killed!")
 
                                 with open('nohup.out', 'w') as f:
@@ -83,8 +85,9 @@ def upload_server(request, *args, **kwargs):
                                     process = subprocess.Popen(cmd, shell=True, stdout=f, start_new_session=True)
                                     online_server_pid = process.pid + 1
                                     info_logger.info(f"server PID: {online_server_pid} is online now!")
-                                    global online_server_file_name
-                                    online_server_file_name = str(files)
+                                    new_process = ServerHistory(pid=online_server_pid,
+                                                                server_name=server_file_name,
+                                                                status="active")
 
                                 return Response({"message": "server is started!"}, status=200)
 
@@ -115,10 +118,10 @@ def get_std_out(request, *args, **kwargs):
 
             with open("nohup.out", "r") as nohup:
                 nohup_output = nohup.read()
-
+            file_name = ServerHistory.objects.get(status="active")
             data = {
                 "output": nohup_output,
-                "file_name": online_server_file_name
+                "file_name": file_name
             }
             return Response(data)
         except Exception as e:

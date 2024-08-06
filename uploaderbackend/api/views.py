@@ -29,8 +29,7 @@ def home_page(request):
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
-        online_server_pid = ServerHistory.objects.filter(status="active")[0]
-        info_logger.info(online_server_pid)
+        online_server_pid = ServerHistory.objects.filter(status="active")
         server_file_name = str(request.data.get("serverFile"))
         server_file = request.FILES[list(request.FILES.keys())[0]].file
         try:
@@ -70,12 +69,14 @@ def upload_server(request, *args, **kwargs):
                                 subprocess.run("rm -r nohup.out", shell=True)
 
                                 if online_server_pid:
-                                    info_logger.info(f"old process PID :{online_server_pid}")
-                                    old_process = ServerHistory.objects.filter(pid=online_server_pid)[0]
+                                    info_logger.info(online_server_pid)
+                                    info_logger.info(online_server_pid[0])
+                                    info_logger.info(f"old process PID :{online_server_pid[0]}")
+                                    old_process = ServerHistory.objects.filter(pid=online_server_pid[0])
                                     info_logger.info(old_process)
                                     old_process.status = "Stopped"
                                     old_process.save()
-                                    subprocess.run(f"kill {online_server_pid}", shell=True)
+                                    subprocess.run(f"kill {online_server_pid[0]}", shell=True)
 
                                     info_logger.info(f"old process PID :{online_server_pid} killed!")
 
@@ -118,10 +119,10 @@ def get_std_out(request, *args, **kwargs):
 
             with open("nohup.out", "r") as nohup:
                 nohup_output = nohup.read()
-            file_name = ServerHistory.objects.filter(status="active")[0]
+            file_name = ServerHistory.objects.filter(status="active")
             data = {
                 "output": nohup_output,
-                "file_name": file_name
+                "file_name": file_name[0] if file_name else ""
             }
             return Response(data)
         except Exception as e:

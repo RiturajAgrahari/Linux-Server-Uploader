@@ -26,8 +26,8 @@ def home_page(request):
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
-        online_server_pid = ServerHistory.objects.filter(status="active").values().get("pid")
-        info_logger.info(online_server_pid)
+        online_server = ServerHistory.objects.filter(status="active").values()
+        info_logger.info(online_server)
         server_file_name = str(request.data.get("serverFile"))
         server_file = request.FILES[list(request.FILES.keys())[0]].file
         try:
@@ -66,7 +66,8 @@ def upload_server(request, *args, **kwargs):
                                 subprocess.run(f'chmod +x ./server/{correct_format}/{files}', shell=True)
                                 subprocess.run("rm -r nohup.out", shell=True)
 
-                                if online_server_pid:
+                                if online_server:
+                                    online_server_pid = online_server.get("pid")
                                     info_logger.info(online_server_pid)
                                     info_logger.info(f"old process PID :{online_server_pid}")
                                     old_process = ServerHistory.objects.filter(pid=online_server_pid)

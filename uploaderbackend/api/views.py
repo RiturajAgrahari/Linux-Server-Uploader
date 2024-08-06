@@ -27,7 +27,6 @@ def home_page(request):
 def upload_server(request, *args, **kwargs):
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
         online_server = ServerHistory.objects.filter(status="active").values()
-        info_logger.info(online_server)
         server_file_name = str(request.data.get("serverFile"))
         server_file = request.FILES[list(request.FILES.keys())[0]].file
         try:
@@ -67,16 +66,16 @@ def upload_server(request, *args, **kwargs):
                                 subprocess.run("rm -r nohup.out", shell=True)
 
                                 if online_server:
-                                    online_server_pid = online_server.get("pid")
-                                    info_logger.info(online_server_pid)
+                                    online_server_pid = online_server[0].get("pid")
                                     info_logger.info(f"old process PID :{online_server_pid}")
-                                    old_process = ServerHistory.objects.filter(pid=online_server_pid)
-                                    info_logger.info(old_process)
-                                    old_process.status = "Stopped"
-                                    old_process.save()
-                                    subprocess.run(f"kill {online_server_pid}", shell=True)
-
-                                    info_logger.info(f"old process PID :{online_server_pid} killed!")
+                                    ServerHistory.objects.filter(pid=online_server_pid).update(status="stopped")
+                                    try:
+                                        subprocess.run(f"kill {online_server_pid}", shell=True)
+                                        info_logger.info(f"old process PID :{online_server_pid} killed!")
+                                    except Exception as e:
+                                        error_logger.error(e)
+                                        info_logger.info(f"Unable to stop PID (PID may not exist):{online_server_pid}!")
+                                        pass
 
                                 with open('nohup.out', 'w') as f:
                                     cmd = f'./server/{correct_format}/{files}'

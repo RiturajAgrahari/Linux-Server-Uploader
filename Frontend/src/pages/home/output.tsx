@@ -18,8 +18,8 @@ function Output() {
             try {
                 const res = await api.get("/api-data/server-output/")
                 if (res.status == 200) {
-                    setConsoleResult(res.data.output)
                     setFileName(res.data.file_name)
+                    setConsoleResult(res.data.output)
                 }
             } catch(error) {
                 console.error("Error Fetching", error)

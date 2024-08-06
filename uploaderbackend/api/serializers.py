@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import ServerPID
+from .models import ServerHistory
 
 
-class ServerPIDSerializer(serializers.ModelSerializer):
+class ServerHistorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = ServerPID
+        model = ServerHistory
         fields = "__all__"

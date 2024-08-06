@@ -10,8 +10,8 @@ import os
 import logging
 import subprocess
 
-from .serializers import ServerPIDSerializer
-from .models import ServerPID
+from .serializers import ServerHistorySerializer
+from .models import ServerHistory
 from .forms import ServerPIDForm
 
 logger = logging.getLogger("django")
@@ -19,24 +19,21 @@ info_logger = logging.getLogger("log_info")
 error_logger = logging.getLogger("log_error")
 
 
-online_server_pid = 0
-online_server_file_name = ""
-
-
 # Create your views here.
 def home_page(request):
     return HttpResponse("HOME PAGE")
 
-import time
 
 @api_view(["POST"])
 @permission_classes([IsAdminUser])
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
-    time.sleep(10)
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
+        online_server_pid = ServerHistory.objects.all().filter(status="active")
+        info_logger.info(online_server_pid)
         server_file_name = str(request.data.get("serverFile"))
-        server_file = ""
+        server_file = request.FILES[request.FILES.keys()[0]].file
+        info_logger.info(server_file)
         for filename, file in request.FILES.items():
             server_file = request.FILES[filename].file
         try:
@@ -75,8 +72,6 @@ def upload_server(request, *args, **kwargs):
                                 subprocess.run(f'chmod +x ./server/{correct_format}/{files}', shell=True)
 
                                 subprocess.run("rm -r nohup.out", shell=True)
-
-                                global online_server_pid
 
                                 if online_server_pid:
                                     info_logger.info(f"old process PID :{online_server_pid}")

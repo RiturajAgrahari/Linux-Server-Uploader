@@ -116,10 +116,10 @@ def get_std_out(request, *args, **kwargs):
 
             with open("nohup.out", "r") as nohup:
                 nohup_output = nohup.read()
-            file_name = ServerHistory.objects.filter(status="active").values().get("server_name")
+            file_name = ServerHistory.objects.filter(status="active").values()
             data = {
                 "output": nohup_output,
-                "file_name": file_name if file_name else ""
+                "file_name": file_name[0].get['server_name'] if file_name else ""
             }
             return Response(data)
         except Exception as e:

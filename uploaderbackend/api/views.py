@@ -29,11 +29,10 @@ def home_page(request):
 @authentication_classes([JWTAuthentication, SessionAuthentication])
 def upload_server(request, *args, **kwargs):
     if str(request.user) == "Rituraj" or str(request.user) == "abbie":
-        online_server_pid = ServerHistory.objects.get(status="active")
+        online_server_pid = ServerHistory.objects.filter(status="active").first()
         info_logger.info(online_server_pid)
         server_file_name = str(request.data.get("serverFile"))
         server_file = request.FILES[list(request.FILES.keys())[0]].file
-        info_logger.info(server_file)
         try:
             if server_file_name.endswith(".rar") or server_file_name.endswith(".zip"):
                 # removing the old server file
@@ -72,7 +71,7 @@ def upload_server(request, *args, **kwargs):
 
                                 if online_server_pid:
                                     info_logger.info(f"old process PID :{online_server_pid}")
-                                    old_process = ServerHistory.objects.get(pid=online_server_pid)
+                                    old_process = ServerHistory.objects.filter(pid=online_server_pid).first()
                                     info_logger.info(old_process)
                                     old_process.status = "Stopped"
                                     old_process.save()
@@ -88,6 +87,7 @@ def upload_server(request, *args, **kwargs):
                                     new_process = ServerHistory(pid=online_server_pid,
                                                                 server_name=server_file_name,
                                                                 status="active")
+                                    new_process.save()
 
                                 return Response({"message": "server is started!"}, status=200)
 
@@ -118,7 +118,7 @@ def get_std_out(request, *args, **kwargs):
 
             with open("nohup.out", "r") as nohup:
                 nohup_output = nohup.read()
-            file_name = ServerHistory.objects.get(status="active")
+            file_name = ServerHistory.objects.filter(status="active").first()
             data = {
                 "output": nohup_output,
                 "file_name": file_name

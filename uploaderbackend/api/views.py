@@ -6,13 +6,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import authentication_classes, permission_classes, api_view
 from django.core.files.storage import FileSystemStorage, default_storage
 
-import os
 import logging
 import subprocess
 
-from .serializers import ServerHistorySerializer
 from .models import ServerHistory
-from .forms import ServerPIDForm
 
 logger = logging.getLogger("django")
 info_logger = logging.getLogger("log_info")
@@ -70,15 +67,14 @@ def upload_server(request, *args, **kwargs):
 
                                 if online_server_pid:
                                     info_logger.info(online_server_pid)
-                                    info_logger.info(online_server_pid[0])
-                                    info_logger.info(f"old process PID :{online_server_pid[0]}")
-                                    old_process = ServerHistory.objects.filter(pid=online_server_pid[0])
+                                    info_logger.info(f"old process PID :{online_server_pid[0]['pid']}")
+                                    old_process = ServerHistory.objects.filter(pid=online_server_pid[0]['pid'])
                                     info_logger.info(old_process)
                                     old_process.status = "Stopped"
                                     old_process.save()
-                                    subprocess.run(f"kill {online_server_pid[0]}", shell=True)
+                                    subprocess.run(f"kill {online_server_pid[0]['pid']}", shell=True)
 
-                                    info_logger.info(f"old process PID :{online_server_pid} killed!")
+                                    info_logger.info(f"old process PID :{online_server_pid[0]['pid']} killed!")
 
                                 with open('nohup.out', 'w') as f:
                                     cmd = f'./server/{correct_format}/{files}'
@@ -122,7 +118,7 @@ def get_std_out(request, *args, **kwargs):
             file_name = ServerHistory.objects.filter(status="active")
             data = {
                 "output": nohup_output,
-                "file_name": file_name[0] if file_name else ""
+                "file_name": file_name[0]['server_name'] if file_name else ""
             }
             return Response(data)
         except Exception as e:

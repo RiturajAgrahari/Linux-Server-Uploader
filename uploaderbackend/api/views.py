@@ -68,7 +68,9 @@ def upload_server(request, *args, **kwargs):
                                 if online_server:
                                     online_server_pid = online_server[0].get("pid")
                                     info_logger.info(f"old process PID :{online_server_pid}")
-                                    ServerHistory.objects.filter(pid=online_server_pid).update(status="stopped")
+                                    last_active_process = ServerHistory.objects.filter(pid=online_server_pid)[0]
+                                    last_active_process.status = "stopped"
+                                    last_active_process.save()
                                     try:
                                         subprocess.run(f"kill {online_server_pid}", shell=True)
                                         info_logger.info(f"old process PID :{online_server_pid} killed!")
